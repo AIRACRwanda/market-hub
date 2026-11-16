@@ -1,0 +1,41 @@
+# ── Python / Django ──────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pyc
+*.egg-info/
+.eggs/
+dist/
+build/
+*.egg
+
+# Virtual environment
+backend/venv/
+backend/env/
+backend/.venv/
+
+# Django
+backend/*.sqlite3
+backend/staticfiles/
+backend/media/
+backend/.env
+
+# ── Node / React ──────────────────────────────────────────────────────────────
+frontend/node_modules/
+frontend/dist/
+frontend/.env
+frontend/.env.local
+frontend/.env.production
+
+# ── OS / Editor ───────────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+.idea/
+.vscode/
+*.log
+
+# ── Images folder (large binary files — keep reference only) ─────────────────
+# IMAGE/

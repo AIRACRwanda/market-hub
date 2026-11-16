@@ -1,0 +1,629 @@
+TOURISM MARKETPLACE PLATFORM | SYSTEM DESCRIPTION & DEVELOPMENT ROADMAP
+TOURISM MARKETPLACE PLATFORM
+System Description and Detailed Development Roadmap
+
+A clear project guide covering the system purpose, features, requirements,
+architecture, development phases, testing, deployment, and maintenance.
+Prepared as a project planning document.
+
+Last updated: Reflects all decisions confirmed during planning discussions.
+
+================================================================================
+TECHNOLOGY STACK (CONFIRMED)
+================================================================================
+
+Frontend  : React + React Router + Tailwind CSS
+Backend   : Django + Django REST Framework (DRF)
+Database  : PostgreSQL
+Media     : Django media file handling (images + documents)
+Auth      : JWT tokens (access + refresh)
+Payments  : Placeholder only in first release — full integration added later
+AI        : Stubbed and prepared in first release — full integration last phase
+
+================================================================================
+DOCUMENT CONTENTS
+================================================================================
+
+1.  Introduction
+2.  System Overview
+3.  User Roles and Responsibilities
+4.  User Role Registration and Upgrade Flow
+5.  Main System Features
+6.  Listing Approval Workflow (Confirmed)
+7.  Listing Status Reference
+8.  Admin Powers and Account Management
+9.  High-Level Requirements
+10. Proposed System Architecture
+11. Development Method
+12. Detailed Development Phases (Build Order)
+13. Testing and Quality Assurance Plan
+14. Deployment and Launch Plan
+15. Maintenance and Future Improvements
+16. Project Deliverables and Success Measures
+17. Assumptions and Confirmed Decisions
+
+================================================================================
+1. INTRODUCTION
+================================================================================
+
+This document describes the Tourism Marketplace Platform and provides a
+practical roadmap for developing it. It has been updated to reflect all
+decisions confirmed during the initial planning discussion.
+
+The platform allows sellers and owners to publish listings for properties or
+products available for sale or rent. Buyers can search, discover, and enquire
+about listings. An admin team oversees all listings and user accounts to
+maintain quality and trust on the platform.
+
+================================================================================
+2. SYSTEM OVERVIEW
+================================================================================
+
+2.1 What the system does
+
+The system is an online marketplace where:
+- Sellers/owners publish listings (properties or products for sale or rent).
+- Buyers browse, search, filter, and send enquiries to sellers.
+- Admins review every new listing before it becomes publicly visible.
+- Admins manage user accounts and can disable accounts when needed.
+
+A listing includes a title, category, description, photos, price, location,
+availability, and relevant features. Listings are NOT visible to the public
+until an admin approves them.
+
+2.2 Main purpose
+
+- Make it easy to find properties or products that match a user's needs.
+- Give sellers a structured and verified way to publish listings.
+- Protect buyers by ensuring all visible listings have been reviewed.
+- Support communication between buyers and listing owners.
+- Help admins maintain listing quality, user safety, and platform reliability.
+- Prepare the system for AI-based recommendations and payment integration
+  in later phases.
+
+2.3 Scope of first release
+
+Included in first release:
+- User registration and authentication (Buyer, Seller, Admin roles).
+- Buyer-to-Seller role upgrade flow.
+- Listing creation, editing, and management by sellers.
+- Listing approval workflow with proof verification by admin.
+- Search and filtering for published listings.
+- Buyer-Seller enquiry and communication system.
+- Admin dashboard (listings, users, reports, audit log).
+- Payment option placeholder (UI present, not functional yet).
+- AI recommendation stubs (database fields and API endpoints prepared).
+- Notification system on seller dashboard (approval/rejection alerts).
+
+Deferred to later phases:
+- Full payment provider integration.
+- Full AI recommendation engine.
+- Email / SMS notifications (dashboard notifications only in first release).
+
+================================================================================
+3. USER ROLES AND RESPONSIBILITIES
+================================================================================
+
+Role            | How they access the platform
+----------------|--------------------------------------------------------------
+Visitor         | No account needed. Can browse published listings only.
+Buyer           | Registers as a buyer. Can search, save preferences, send
+                | enquiries, and track enquiry status.
+Seller / Owner  | Registers as a seller OR upgrades from an existing buyer
+                | account. Can create and manage listings, respond to enquiries.
+Admin           | Created manually or by a super admin. Full platform oversight.
+
+Role permissions summary:
+
+Visitor  : View published listings. Register or sign in.
+Buyer    : All visitor permissions + manage own profile, send enquiries,
+           view own enquiry history, upgrade to seller.
+Seller   : All buyer permissions + create/edit/remove own listings,
+           submit listing proof, respond to enquiries, view dashboard
+           notifications.
+Admin    : All permissions + approve/reject listings, request proof,
+           disable/enable user accounts, view all listings and users,
+           manage reports, access audit log.
+
+================================================================================
+4. USER ROLE REGISTRATION AND UPGRADE FLOW
+================================================================================
+
+4.1 Buyer registration
+- User visits registration page and selects "Register as Buyer".
+- Provides name, email or phone number, and password.
+- Account created with role = Buyer.
+
+4.2 Seller registration
+- User visits registration page and selects "Register as Seller".
+- System asks: "Do you already have an account on this platform?"
+  YES → System fetches existing account using their email or phone number.
+        Role is upgraded from Buyer to Seller on the same account.
+        No duplicate account is created.
+  NO  → Fresh seller registration form (name, email/phone, password,
+        basic seller profile information).
+- Account created with or upgraded to role = Seller.
+
+4.3 Admin accounts
+- Admin accounts are created manually by a super admin.
+- Not available through public registration.
+
+================================================================================
+5. MAIN SYSTEM FEATURES
+================================================================================
+
+5.1 Listing management (Seller)
+- Create a listing with title, category, sale/rent type, description,
+  price, location, availability, and relevant features.
+- Upload multiple photos (at least one photo is required).
+- Optionally upload supporting documents.
+- Edit, pause, mark as sold/rented, or remove a listing.
+- View listing status at all times on the seller dashboard.
+- Receive dashboard notifications when listing is approved or rejected.
+
+5.2 Listing approval (Admin)
+- All new and resubmitted listings arrive in admin dashboard as
+  "Pending Review".
+- Admin can approve, reject, or request proof from the seller.
+- Admin can type a custom message when requesting proof or rejecting.
+- See full details in Section 6.
+
+5.3 Search and filtering (Buyer / Visitor)
+- Search using keywords and category.
+- Filter by location, price range, sale or rent, availability, and
+  property/product features.
+- Sort by relevance, price, or newest listings.
+- Clear empty-result messages and filter reset option.
+- Only published (approved) listings appear in search results.
+
+5.4 AI recommendation engine (Prepared, not active in first release)
+- Database fields for user preferences are created from the start.
+- API endpoint stubs are prepared for future AI integration.
+- Preference fields: budget, preferred location, category, intended use,
+  desired amenities.
+- Full recommendation logic is implemented in the final phase.
+
+5.5 Buyer-Seller communication and enquiry tracking
+- Enquiry button on every published listing.
+- Buyer sends a message/enquiry to the listing owner.
+- Seller sees and responds to enquiries on their dashboard.
+- Enquiry statuses: new, responded, viewing requested, closed.
+- Users can only see their own enquiries.
+
+5.6 Payments (Placeholder in first release)
+- Payment option/button is visible in the UI.
+- Not connected to any payment provider yet.
+- Database model and API endpoint are prepared for future integration.
+- Full payment integration is added in a later phase.
+
+5.7 User and administration management
+- Register and manage user accounts and seller profiles.
+- Admin can view all users and all listings.
+- Admin can disable or re-enable any user account.
+- When a seller account is disabled:
+    - All their listings are automatically hidden from public view.
+    - Reason: buyers cannot get help from a seller who is unavailable.
+- Admin can review reports and complaints.
+- Admin dashboard shows platform-wide summaries and audit log.
+
+================================================================================
+6. LISTING APPROVAL WORKFLOW (CONFIRMED)
+================================================================================
+
+Step 1: Seller submits a new listing.
+        → Listing status set to: pending_review
+        → Listing is NOT visible to visitors or buyers yet.
+
+Step 2: Admin reviews the listing in the admin dashboard.
+
+        Option A — Admin approves directly:
+        → Status: published
+        → Listing becomes visible to all visitors and buyers.
+        → Seller receives a dashboard notification: "Your listing was approved."
+
+        Option B — Admin requests proof:
+        → Status: proof_requested
+        → Admin types what proof is needed (images and/or documents).
+        → Seller receives a dashboard notification with the proof request.
+        → Seller has 3 days to submit proof.
+        → Seller has a maximum of 3 submission attempts total.
+
+        Option C — Admin rejects directly:
+        → Status: rejected
+        → Seller receives a dashboard notification with the rejection reason.
+        → If attempts remain (max 3 total), seller can revise and resubmit.
+
+Step 3: Seller submits proof (images required, documents optional).
+        → Status: under_review
+        → Admin reviews the submitted proof.
+
+        Admin approves proof:
+        → Status: published
+        → Seller notified on dashboard.
+
+        Admin rejects proof:
+        → Seller notified with reason.
+        → If attempts remaining: seller can resubmit (back to proof_requested).
+        → If 0 attempts remaining: status = permanently_rejected.
+
+Step 4: Time limit enforcement.
+        → If seller does not respond to a proof request within 3 days:
+        → Status: expired
+        → Listing is no longer active.
+
+Proof requirements:
+- At least one image is required.
+- Supporting document is optional but can be requested by admin.
+- Admin can specify exactly what proof they need in a text message.
+
+================================================================================
+7. LISTING STATUS REFERENCE
+================================================================================
+
+Status                | Meaning
+----------------------|-----------------------------------------------------------
+pending_review        | Submitted by seller, waiting for admin review.
+proof_requested       | Admin has asked seller for proof. 3-day deadline starts.
+under_review          | Seller submitted proof, admin is reviewing.
+published             | Approved and visible to all visitors and buyers.
+rejected              | Not approved. Seller notified. May resubmit if attempts left.
+permanently_rejected  | All 3 attempts exhausted. Listing cannot be resubmitted.
+expired               | Seller did not respond to proof request within 3 days.
+sold                  | Seller marked the item as sold.
+rented                | Seller marked the item as rented.
+removed               | Seller deleted the listing or admin removed it.
+hidden                | Seller's account was disabled; listing auto-hidden.
+
+================================================================================
+8. ADMIN POWERS AND ACCOUNT MANAGEMENT
+================================================================================
+
+8.1 Listing moderation
+- View all listings regardless of status.
+- Approve, reject, or request proof on any pending listing.
+- Remove any published listing if it violates platform rules.
+- Record a reason for every moderation action (audit log).
+
+8.2 User account management
+- View all registered users (buyers and sellers).
+- Disable a user account with a recorded reason.
+  → All listings owned by a disabled seller are automatically hidden.
+- Re-enable a disabled account.
+  → Listings return to their previous status (published or other).
+- Review reports and complaints submitted by users.
+
+8.3 Audit log
+- Every important admin action is recorded:
+  listing approvals, rejections, proof requests, account disables,
+  account re-enables, listing removals.
+
+================================================================================
+9. HIGH-LEVEL REQUIREMENTS
+================================================================================
+
+9.1 Functional requirements
+- The system shall allow visitors to browse and search published listings.
+- The system shall allow buyers to send enquiries to listing owners.
+- The system shall allow sellers to create, edit, and manage their listings.
+- The system shall route every new listing to admin for review before
+  it becomes publicly visible.
+- The system shall support a proof-request workflow with a 3-day deadline
+  and a maximum of 3 submission attempts.
+- The system shall notify sellers on their dashboard of approval or rejection.
+- The system shall allow admins to disable user accounts.
+- When a seller account is disabled, all their listings shall be hidden.
+- The system shall enforce role-based permissions throughout.
+- The system shall prepare database fields and API stubs for AI recommendations
+  and payment integration even if not active in the first release.
+
+9.2 Non-functional requirements
+- Security: protect accounts, sessions, file uploads, and admin actions.
+- Privacy: collect only needed personal data and restrict access.
+- Usability: clear navigation, readable text, helpful forms, good error messages.
+- Performance: browsing, searching, and listing actions respond within targets.
+- Scalability: structure allows users, listings, and traffic to grow.
+- Maintainability: organized code, documented APIs, version control.
+- Compatibility: responsive on mobile and desktop, tested on major browsers.
+
+================================================================================
+10. PROPOSED SYSTEM ARCHITECTURE
+================================================================================
+
+Frontend (React)
+- React + React Router for page navigation.
+- Tailwind CSS for styling and responsive layout.
+- Axios for API communication with the backend.
+- Role-based UI: different views for Visitor, Buyer, Seller, Admin.
+
+Backend (Django + DRF)
+- Django REST Framework for all API endpoints.
+- JWT authentication (access + refresh tokens).
+- Role-based permissions enforced on every endpoint.
+- Media file handling for listing images and proof documents.
+- Background task support for 3-day proof deadline enforcement.
+
+Database (PostgreSQL)
+- Users, profiles, seller profiles.
+- Listings, listing images, listing documents (proof).
+- Categories, listing features.
+- Enquiries, enquiry messages.
+- Notifications (dashboard).
+- Transactions (placeholder model).
+- User preferences (AI-ready fields).
+- Audit log.
+- Reports and complaints.
+
+Media storage
+- Listing photos (required, multiple per listing).
+- Proof images (required when proof is requested).
+- Proof documents (optional, PDF or image).
+
+AI recommendation component (stubbed)
+- Preference fields in user profile model from day one.
+- Recommendation API endpoint stubbed and documented.
+- Full logic implemented in the final phase.
+
+Payment component (stubbed)
+- Transaction model created from day one.
+- Payment button/option present in UI.
+- Full provider integration added in a later phase.
+
+================================================================================
+11. DEVELOPMENT METHOD
+================================================================================
+
+- Staged, iterative development following the phase order below.
+- Shared Git repository with agreed branching and review practices.
+- Task board with owners, priorities, and status.
+- Requirements, design decisions, and API definitions kept documented.
+- Features demonstrated to stakeholders at agreed review points.
+- Payment and AI components are prepared structurally from the start
+  but not activated until their dedicated phases.
+
+================================================================================
+12. DETAILED DEVELOPMENT PHASES (BUILD ORDER)
+================================================================================
+
+Phase 1: Project Setup and Foundation
+- Initialize Django project and React project inside the repository.
+- Configure PostgreSQL database connection.
+- Set up environment variables and separate dev/prod settings.
+- Configure Django REST Framework, JWT auth, CORS.
+- Set up Tailwind CSS in React.
+- Create health-check endpoint.
+- Document local setup guide.
+
+Phase 2: Authentication and User Management
+- User registration for Buyer and Seller (separate flows).
+- Buyer-to-Seller upgrade flow (fetch existing account by email/phone).
+- Login, logout, JWT token refresh.
+- Password reset / account recovery.
+- User profile and seller profile models and APIs.
+- Role-based permission classes in Django.
+
+Phase 3: Core Listing Management
+- Listing model with all fields (title, category, type, description,
+  price, location, availability, features, status).
+- Listing image upload (multiple images, at least one required).
+- Proof image and document upload models.
+- Seller can create, edit, pause, mark as sold/rented, remove own listings.
+- Listing status machine (all statuses from Section 7).
+- Seller dashboard: listing list with status indicators.
+
+Phase 4: Listing Approval Workflow
+- Admin dashboard: view all pending listings.
+- Admin actions: approve, reject, request proof (with custom message).
+- Proof submission by seller (images required, document optional).
+- 3-attempt counter per listing.
+- 3-day deadline enforcement (background task or scheduled check).
+- Auto-expire listings that miss the deadline.
+- Dashboard notifications for seller (approved / rejected / proof requested).
+
+Phase 5: Search and Filtering
+- Keyword search over listing fields.
+- Filters: category, location, price range, sale/rent, availability,
+  category-specific features.
+- Sorting: relevance, price, newest.
+- Pagination on results.
+- Empty-result and error states.
+- Only published listings appear in search.
+
+Phase 6: Buyer-Seller Enquiry System
+- Enquiry model: listing, sender, recipient, message, status, timestamps.
+- Buyer sends enquiry from listing detail page.
+- Seller views and responds to enquiries on dashboard.
+- Enquiry statuses: new, responded, viewing_requested, closed.
+- Access control: users see only their own enquiries.
+- Viewing request option for property listings.
+
+Phase 7: Admin Dashboard (Full)
+- User management: view all users, disable/re-enable accounts.
+- Auto-hide all listings when seller account is disabled.
+- Listing moderation: view all listings by status, take moderation actions.
+- Reports and complaints management.
+- Audit log: record every important admin action.
+- Platform summary statistics.
+
+Phase 8: Payment Placeholder
+- Transaction model: listing, buyer, seller, status, provider reference,
+  timestamps (all fields ready for real integration).
+- Payment button/option visible in listing detail UI.
+- Status field values prepared: pending, successful, failed, refunded.
+- API endpoint stubbed and documented.
+- No live payment provider connected yet.
+
+Phase 9: AI Recommendation Stubs
+- User preference model fields: budget, preferred location, category,
+  intended use, desired amenities.
+- Recommendation API endpoint stubbed and documented.
+- Preference input UI prepared (form exists, not connected to logic yet).
+- System is fully ready for AI engine to be plugged in.
+
+Phase 10: Integration and End-to-End Testing
+- Connect all frontend screens to backend APIs.
+- Test complete user journeys:
+    Visitor → search → listing detail
+    Buyer → register → enquiry → response
+    Seller → register → create listing → approval flow → manage listing
+    Admin → review listing → approve/reject/request proof → manage users
+- Error handling when services are unavailable.
+- Data consistency checks across pages.
+
+Phase 11: Testing and Quality Assurance
+- Unit tests for business logic and validation.
+- API and integration tests.
+- Role and permission tests (users cannot access other users' data).
+- Security checks: auth, authorization, file upload safety, injection.
+- Responsive and cross-browser testing.
+- Performance testing with realistic data.
+- Defect register and resolution.
+
+Phase 12: Full AI Recommendation Engine
+- Implement matching and ranking logic using listing data and preferences.
+- Connect to prepared stubs from Phase 9.
+- Display recommended listings to buyers.
+- Simple explanation of why each listing was suggested.
+- Evaluate quality against test profiles.
+
+Phase 13: Full Payment Integration
+- Select and configure payment provider (e.g. Stripe).
+- Implement server-side payment initiation.
+- Webhook/callback verification.
+- Handle all transaction states.
+- Sandbox testing before any live transactions.
+- Connect to prepared stubs from Phase 8.
+
+Phase 14: Production Deployment and Launch
+- Production hosting environment setup.
+- Domain, HTTPS/SSL, database, media storage configuration.
+- Environment secrets management.
+- Database migrations and seed data.
+- Logging, monitoring, backup schedules.
+- Smoke tests on all core workflows.
+- Launch checklist and rollback plan.
+
+Phase 15: Maintenance and Future Improvements
+- Monitor errors, availability, performance.
+- Review user feedback and complaints.
+- Fix defects through a controlled release process.
+- Keep dependencies and security settings updated.
+- Review and prioritize improvement backlog.
+
+================================================================================
+13. TESTING AND QUALITY ASSURANCE PLAN
+================================================================================
+
+Test type            | What it checks                      | Example
+---------------------|-------------------------------------|------------------------
+Unit testing         | Single function or component        | Listing status transitions,
+                     | works correctly.                    | proof attempt counter.
+Integration testing  | Connected components exchange       | Backend saves listing,
+                     | correct data.                       | frontend displays it.
+System testing       | Complete application meets          | Buyer searches and
+                     | requirements.                       | submits enquiry.
+Permission testing   | Role access rules are enforced.     | Buyer cannot edit
+                     |                                     | another seller's listing.
+Security testing     | Auth, file upload, injection risks. | Unauthorized API access
+                     |                                     | returns 403.
+Usability testing    | Users can complete tasks.           | Seller publishes listing
+                     |                                     | without assistance.
+Performance testing  | System responds under load.         | Search with large dataset.
+Acceptance testing   | Stakeholders confirm real tasks     | Seller and buyer review
+                     | are supported.                      | key workflows.
+
+================================================================================
+14. DEPLOYMENT AND LAUNCH PLAN
+================================================================================
+
+- Separate development, testing, and production environments.
+- HTTPS on all environments. Secrets never in source control.
+- Database backups with tested restore process.
+- Controlled release with rollback option.
+- Smoke tests after every deployment.
+- User-facing error reporting and support contact.
+
+================================================================================
+15. MAINTENANCE AND FUTURE IMPROVEMENTS
+================================================================================
+
+After launch:
+- Monitor platform health, errors, and user feedback regularly.
+- Prioritize and test improvements before release.
+
+Planned future additions (not in first release):
+- Full AI recommendation engine (Phase 12).
+- Full payment provider integration (Phase 13).
+- Email and SMS notifications.
+- Ratings and reviews system.
+- Saved/favourite listings for buyers.
+- Richer analytics for admin.
+- Additional listing categories.
+- Expanded payment options.
+
+================================================================================
+16. PROJECT DELIVERABLES AND SUCCESS MEASURES
+================================================================================
+
+16.1 Main deliverables
+- Approved project scope and requirements (this document).
+- Responsive marketplace frontend (React).
+- Backend APIs (Django REST Framework).
+- User accounts with Buyer, Seller, and Admin roles.
+- Role upgrade flow (Buyer → Seller).
+- Listing creation, management, and approval workflow.
+- Proof submission system with 3-attempt limit and 3-day deadline.
+- Seller dashboard with status notifications.
+- Search and filtering for published listings.
+- Buyer-Seller enquiry system.
+- Admin dashboard with moderation, user management, and audit log.
+- Payment placeholder (UI + model + stub API).
+- AI recommendation placeholder (preference fields + stub API).
+- Test plans, results, and stakeholder acceptance record.
+- Deployment, backup, and maintenance documentation.
+
+16.2 Success measures
+- Sellers can create listings and move them through the full approval flow.
+- Admin can approve, reject, request proof, and manage users.
+- Proof deadline and attempt limit are enforced automatically.
+- Disabling a seller account hides all their listings immediately.
+- Buyers can search published listings and send enquiries to sellers.
+- Role-based permissions prevent unauthorized access throughout.
+- Payment and AI stubs are ready for integration without structural changes.
+- Critical defects resolved before launch.
+
+================================================================================
+17. ASSUMPTIONS AND CONFIRMED DECISIONS
+================================================================================
+
+Confirmed decisions:
+- Frontend: React + React Router + Tailwind CSS.
+- Backend: Django + Django REST Framework.
+- Database: PostgreSQL.
+- Authentication: JWT (access + refresh tokens).
+- Three separate user roles: Buyer, Seller, Admin.
+- Buyer can upgrade to Seller using existing account (no duplicate account).
+- Admin accounts created manually only.
+- Every listing requires admin approval before becoming publicly visible.
+- Proof requires at least one image; document is optional.
+- Maximum 3 proof submission attempts per listing.
+- Proof request deadline: 3 days from admin's request.
+- Listings that miss the deadline are auto-expired.
+- Seller receives dashboard notifications for all listing status changes.
+- Disabling a seller account auto-hides all their listings.
+- Payments: placeholder in first release, full integration later.
+- AI recommendations: stubs prepared from start, full engine in last phase.
+- Dashboard notifications only in first release (no email/SMS yet).
+
+Items still to confirm before or during development:
+- Specific listing categories for the platform.
+- Which countries or regions the platform will serve at launch.
+- Exact fields required per listing category.
+- Hosting provider and infrastructure budget.
+- Payment provider selection (for future phase).
+- Applicable legal, privacy, and property-listing regulations.
+- Whether viewing appointments need calendar/scheduling features.
+- Whether saved/favourite listings are in the first release.
+
+================================================================================
+END OF DOCUMENT
+================================================================================
